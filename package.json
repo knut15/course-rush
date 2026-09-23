@@ -11,7 +11,8 @@
     "seed": "pnpm --filter course-rush-server seed",
     "dev:server": "pnpm --filter course-rush-server dev",
     "load": "pnpm --filter course-rush-loadgen run:load",
-    "typecheck": "pnpm -r --if-present typecheck"
+    "typecheck": "pnpm -r --if-present typecheck",
+    "dev:web": "pnpm --filter course-rush-web dev"
   },
   "engines": {
     "node": ">=22"

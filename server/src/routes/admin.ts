@@ -104,7 +104,10 @@ adminRouter.get("/stats", async (req, res) => {
       remaining,
       claimed,
       // Redis 가 선점했다고 본 수와 DB 에 실제로 적힌 수의 차. 0 이어야 한다.
-      leaked: remaining === null ? null : claimed - actual,
+      //
+      // M5 가 아닌 전략으로 잰 직후에는 claimed 가 0 이라 이 값이 음수가 된다.
+      // 그건 좌석이 샌 것이 아니라 Redis 를 쓰지 않았다는 뜻이므로 null 로 둔다.
+      leaked: remaining === null || claimed === 0 ? null : claimed - actual,
     },
   });
 });

@@ -25,6 +25,8 @@ type Args = {
   students: number;
   capacity: number | null;
   repeat: number;
+  /** 사람이 읽을 출력을 끄고 결과 JSON 한 덩이만 stdout 에 낸다. 웹이 이걸 읽는다 */
+  json: boolean;
 };
 
 function parseArgs(): Args {
@@ -45,6 +47,7 @@ function parseArgs(): Args {
     students: Number(get("students", "10000")),
     capacity: get("capacity") ? Number(get("capacity")) : null,
     repeat: Number(get("repeat", "1")),
+    json: get("json", "false") === "true",
   };
 }
 
@@ -127,7 +130,12 @@ const reset = () => simple("POST", new URL("/admin/reset", args.base));
 const readStats = () =>
   simple("GET", new URL(`/admin/stats?courseId=${args.courseId}`, args.base)) as Promise<Stats>;
 
-console.log(
+// json 모드에서는 stdout 을 오염시키지 않는다. 웹이 파싱해야 하기 때문이다.
+const say = (line: string) => {
+  if (!args.json) console.log(line);
+};
+
+say(
   `▶ mode=${args.mode} total=${args.total.toLocaleString()} concurrency=${args.concurrency}` +
     ` students=${args.students.toLocaleString()} pool=${args.poolSize ?? "기본"} repeat=${args.repeat}`,
 );
@@ -219,33 +227,38 @@ const summary = {
 };
 
 const m = summary.median;
-console.log("");
+say("");
 if (args.repeat > 1) {
-  console.log(`  회차별 초과       ${pick((r) => r.over).join(", ")}`);
-  console.log(`  회차별 p99        ${pick((r) => r.latencyMs.p99).join(", ")}`);
-  console.log("");
+  say(`  회차별 초과       ${pick((r) => r.over).join(", ")}`);
+  say(`  회차별 p99        ${pick((r) => r.latencyMs.p99).join(", ")}`);
+  say("");
 }
-console.log(`  정원              ${capacity}`);
-console.log(`  등록 (중앙값)     ${m.enrolledRows}`);
-console.log(
+say(`  정원              ${capacity}`);
+say(`  등록 (중앙값)     ${m.enrolledRows}`);
+say(
   `  초과 (중앙값)     ${m.over}${m.over > 0 ? "  ← 정원이 깨졌다" : ""}` +
     (args.repeat > 1 ? `   범위 ${summary.range.over[0]}~${summary.range.over[1]}` : ""),
 );
-console.log(`  중복 학생         ${m.duplicateStudents}`);
-if (m.conflict > 0) console.log(`  충돌 소진         ${m.conflict}   ← 마감이 아니라 실패다`);
-if (m.retries > 0) console.log(`  재시도 누적       ${m.retries}`);
-console.log(`  에러+타임아웃     ${m.errors}`);
-console.log("");
-console.log(
+say(`  중복 학생         ${m.duplicateStudents}`);
+if (m.conflict > 0) say(`  충돌 소진         ${m.conflict}   ← 마감이 아니라 실패다`);
+if (m.retries > 0) say(`  재시도 누적       ${m.retries}`);
+say(`  에러+타임아웃     ${m.errors}`);
+say("");
+say(
   `  RPS (중앙값)      ${m.rps}` +
     (args.repeat > 1 ? `   범위 ${summary.range.rps[0]}~${summary.range.rps[1]}` : ""),
 );
-console.log(`  p50 / p95 / p99   ${m.p50} / ${m.p95} / ${m.p99} ms`);
-if (args.repeat > 1) console.log(`  p99 범위          ${summary.range.p99[0]}~${summary.range.p99[1]} ms`);
+say(`  p50 / p95 / p99   ${m.p50} / ${m.p95} / ${m.p99} ms`);
+if (args.repeat > 1) say(`  p99 범위          ${summary.range.p99[0]}~${summary.range.p99[1]} ms`);
+
+if (args.json) {
+  // 마지막에 한 번만 낸다. 앞의 say() 들은 전부 눌려 있으므로 stdout 은 이 JSON 하나뿐이다.
+  process.stdout.write(JSON.stringify(summary));
+}
 
 if (args.save) {
   mkdirSync("../results", { recursive: true });
   const file = `../results/${args.mode}-cap${capacity}-c${args.concurrency}-x${args.repeat}-${Date.now()}.json`;
   writeFileSync(file, JSON.stringify(summary, null, 2));
-  console.log(`\n  저장 ${file}`);
+  say(`\n  저장 ${file}`);
 }

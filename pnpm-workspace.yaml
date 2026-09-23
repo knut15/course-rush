@@ -4,6 +4,7 @@
 packages:
   - "server"
   - "loadgen"
+  - "web"
 
 allowBuilds:
   # esbuild 는 postinstall 로 플랫폼 바이너리를 받는다. 막으면 tsx 가 뜨지 않는다.

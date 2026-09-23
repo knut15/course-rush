@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+/* 색은 역할로 쓴다. 라이트/다크가 한 곳에서 바뀌게 하려는 것이다. */
+:root {
+  color-scheme: light;
+
+  --surface-0: #f6f6f4;
+  --surface-1: #fcfcfb;
+  --rule: #e2e1dc;
+
+  --text-primary: #0b0b0b;
+  --text-secondary: #52514e;
+  --text-muted: #86857f;
+
+  /* 백분위는 같은 것의 정도 차이다 — 한 hue 의 ordinal 램프를 쓴다.
+     validate_palette.js --ordinal 로 두 모드 모두 통과시킨 값이다. */
+  --p50: #86b6ef;
+  --p95: #3987e5;
+  --p99: #1c5cab;
+
+  /* 상태색은 예약해 둔다. 계열 색으로 돌려쓰지 않는다. */
+  --critical: #e34948;
+  --good: #1baf7a;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
+    --surface-0: #121211;
+    --surface-1: #1a1a19;
+    --rule: #33332f;
+
+    --text-primary: #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted: #8c8b82;
+
+    /* 다크는 자동 반전이 아니라 다크 표면에 맞춰 다시 고른 단계다. */
+    --p50: #b7d3f6;
+    --p95: #6da7ec;
+    --p99: #2a78d6;
+
+    --critical: #e66767;
+    --good: #199e70;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --surface-0: #121211;
+  --surface-1: #1a1a19;
+  --rule: #33332f;
+  --text-primary: #ffffff;
+  --text-secondary: #c3c2b7;
+  --text-muted: #8c8b82;
+  --p50: #b7d3f6;
+  --p95: #6da7ec;
+  --p99: #2a78d6;
+  --critical: #e66767;
+  --good: #199e70;
+}
+
+body {
+  background: var(--surface-0);
+  color: var(--text-primary);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Apple SD Gothic Neo", sans-serif;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
