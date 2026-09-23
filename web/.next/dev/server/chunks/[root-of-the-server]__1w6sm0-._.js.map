@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 52, "column": 0}, "map": {"version":3,"sources":["file:///Users/kim/Workspace/course-rush/web/src/app/api/strategies/route.ts"],"sourcesContent":["// 신청 서버가 아는 전략 목록을 그대로 흘린다.\n// 화면이 전략을 하드코딩하면 서버에 M6 을 붙였을 때 화면만 모르게 된다.\n\nconst SERVER = process.env.RUSH_SERVER_URL ?? \"http://localhost:4100\";\n\nexport async function GET() {\n  try {\n    const res = await fetch(`${SERVER}/admin/strategies`, { cache: \"no-store\" });\n    return Response.json(await res.json());\n  } catch {\n    return Response.json(\n      { error: \"신청 서버(4100)에 연결하지 못했습니다. pnpm dev:server 를 먼저 띄우세요.\" },\n      { status: 503 },\n    );\n  }\n}\n"],"names":["SERVER","process","env","RUSH_SERVER_URL","GET","res","fetch","cache","Response","json","error","status"],"mappings":";;;;AAAA,4BAA4B;AAC5B,4CAA4C;AAE5C,MAAMA,SAASC,QAAQC,GAAG,CAACC,eAAe,IAAI;AAEvC,eAAeC;IACpB,IAAI;QACF,MAAMC,MAAM,MAAMC,MAAM,GAAGN,OAAO,iBAAiB,CAAC,EAAE;YAAEO,OAAO;QAAW;QAC1E,OAAOC,SAASC,IAAI,CAAC,MAAMJ,IAAII,IAAI;IACrC,EAAE,OAAM;QACN,OAAOD,SAASC,IAAI,CAClB;YAAEC,OAAO;QAAsD,GAC/D;YAAEC,QAAQ;QAAI;IAElB;AACF"}}]
-}
