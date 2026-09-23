@@ -1,0 +1,31 @@
+{
+  "measuredAt": "2026-09-23T02:03:06.511Z",
+  "env": "10코어 / 16GB / macOS · 전부 로컬",
+  "mode": "M5",
+  "total": 10000,
+  "concurrency": 1000,
+  "students": 10000,
+  "poolSize": null,
+  "requestedCapacity": 5000,
+  "capacity": 5000,
+  "enrolledRows": 5000,
+  "over": 0,
+  "duplicateStudents": 0,
+  "outcome": {
+    "enrolled": 5000,
+    "full": 5000,
+    "duplicate": 0,
+    "conflict": 0,
+    "errors": 0,
+    "timeouts": 0,
+    "retries": 0
+  },
+  "elapsedMs": 1133.6,
+  "rps": 8821.2,
+  "latencyMs": {
+    "p50": 60.4,
+    "p95": 287.9,
+    "p99": 378.3,
+    "max": 384.6
+  }
+}

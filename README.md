@@ -1,0 +1,126 @@
+# course-rush
+
+![Node.js](https://img.shields.io/badge/Node.js-22+-5FA04E?style=flat-square&logo=nodedotjs&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![Express](https://img.shields.io/badge/Express-5.2.1-000000?style=flat-square&logo=express&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?style=flat-square&logo=postgresql&logoColor=white)
+![Redis](https://img.shields.io/badge/Redis-7-FF4438?style=flat-square&logo=redis&logoColor=white)
+![k6](https://img.shields.io/badge/k6-2.3.0-7D64FF?style=flat-square&logo=k6&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-compose-2496ED?style=flat-square&logo=docker&logoColor=white)
+![pnpm](https://img.shields.io/badge/pnpm-11.20.0-F69220?style=flat-square&logo=pnpm&logoColor=white)
+
+수강신청처럼 **한 자리를 여럿이 동시에 노리는 상황**에서 무엇이 깨지고 어떻게 고치는지를,
+다섯 가지 구현에 같은 부하를 던져 수치로 비교하는 데모다.
+
+만든 이유는 "1만 명을 처리했다" 를 보여주려는 것이 아니다.
+정원 50인 과목에 요청이 몰릴 때 **순진하게 짜면 63명이 등록된다는 사실**을 먼저 재현하고,
+그것을 고치는 네 가지 방법이 각각 무엇을 얻고 무엇을 잃는지를 설명할 수 있게 하는 것이 목적이다.
+
+## 무엇을 비교하는가
+
+| | 방식 | 한 줄 |
+|---|---|---|
+| **M1** | 순진한 구현 | `SELECT count` → 판정 → `INSERT`. 읽기와 쓰기 사이가 열려 있다 |
+| **M2** | 비관적 락 | `SELECT ... FOR UPDATE` 로 행을 잠근다. 정확하지만 전부 줄을 선다 |
+| **M3** | 낙관적 락 | 읽을 때 본 `version` 을 조건에 건다. 충돌하면 재시도 |
+| **M4** | DB 원자적 갱신 | `UPDATE ... WHERE enrolled_count < capacity` 한 문장이 판정과 확보를 함께 |
+| **M5** | Redis 선점 | Lua 스크립트가 중복 검사와 정원 차감을 원자적으로. DB 는 결과만 적는다 |
+
+규칙은 둘이다 — **정원**과 **중복신청 방지**. 둘째 규칙 하나가 M4·M5 에 트랜잭션과 보상 로직을 불러온다.
+
+## 지금까지 나온 것
+
+10코어 / 16GB / macOS 로컬. 총 1만 요청 / 동시 1,000 / 커넥션 풀 20. 내부 생성기 3회 중앙값이다.
+
+**정원 5,000 — 절반이 자리다툼하는 조건**
+
+| 모드 | 초과 | p50 | p99 | RPS | 충돌 소진 |
+|---|---:|---:|---:|---:|---:|
+| M1 | **116** (84~165) | 388 | 460 | 2,546 | – |
+| M2 | 0 | 1,340 | 1,768 | 682 | 0 |
+| M3 | 0 | 3,620 | 4,092 | 344 | **2,810** |
+| M4 | 0 | 605 | 1,131 | 1,524 | 0 |
+| M5 | 0 | **39** | 433 | 7,367 | 0 |
+
+읽는 법이 셋 있다.
+
+- **M1 은 깨진다.** 같은 1만 요청이라도 동시성 1로 보내면 정확히 50명이다. 요청 수가 아니라 동시성이 원인이다
+- **M3 이 무너진다.** 정확하긴 한데 요청의 28%가 재시도 10회를 다 쓰고 실패했다.
+  낙관적 락은 충돌이 드물 때만 유리하고, 수강신청은 그 반대다
+- **M5 의 RPS 를 그대로 믿지 않는다.** 서버가 너무 빨라서 측정 장비 쪽이 병목이 된다.
+  자세한 근거는 [results/MEASUREMENT.md](results/MEASUREMENT.md)
+
+## 돌려 보기
+
+```bash
+pnpm install
+
+# PostgreSQL(5433) · Redis(6380)
+pnpm db:up
+
+# 스키마와 시드 — 학생 1만 명, 과목 1개(정원 50)
+pnpm schema && pnpm seed
+
+# 신청 서버 (4100)
+pnpm dev:server
+```
+
+다른 터미널에서 부하를 던진다.
+
+```bash
+# 정원이 깨지는 것부터 본다
+pnpm load --mode=M1 --total=10000 --concurrency=1000
+
+# 고친 것과 비교한다
+pnpm load --mode=M4 --total=10000 --concurrency=1000
+
+# 자리다툼이 긴 조건 · 3회 반복 중앙값
+pnpm load --mode=M5 --total=10000 --concurrency=1000 --capacity=5000 --repeat=3
+```
+
+동시성을 1로 주면 깨지지 않는 것을 확인할 수 있다.
+
+```bash
+pnpm load --mode=M1 --total=10000 --concurrency=1
+```
+
+k6 로도 잰다. 로컬 설치 없이 Docker 로 돈다.
+
+```bash
+./k6/run.sh M4 5000 10000 1000    # 모드 정원 총요청 VU
+```
+
+### 부하 생성기 옵션
+
+| 옵션 | 기본 | 뜻 |
+|---|---|---|
+| `--mode` | `M1` | 전략 |
+| `--total` | `10000` | 총 요청 수 |
+| `--concurrency` | `1000` | 동시 요청 수 |
+| `--capacity` | (현재값) | 정원. 올리면 마감 판정이 아니라 자리다툼을 재게 된다 |
+| `--students` | `10000` | 학생 id 범위. 좁히면 중복신청 경로가 열린다 |
+| `--pool` | (서버 기본) | DB 커넥션 풀 크기 |
+| `--repeat` | `1` | 반복 횟수. 2 이상이면 중앙값과 범위를 낸다 |
+
+## 어디까지 왔나
+
+| 단계 | 내용 | 상태 |
+|---|---|---|
+| 1 | 골격 · 스키마 · 시드 · M1 · 부하 생성기 | 완료 |
+| 2 | M2 · M3 · M4 · 풀 크기 실험 | 완료 |
+| 3 | Redis · M5 · 좌석 증발 보상 | 완료 |
+| 4 | k6 · 반복 측정 중앙값 · 대조 | 완료 |
+| 5 | 웹 화면 (비교표 + 응답시간 분포 차트) | 진행 중 |
+| 6 | 대기열 · SSE · 유입 속도 조절 | 예정 |
+| 7 | README 완성 · 발표 슬라이드 | 예정 |
+
+## 문서
+
+- [GOAL.md](GOAL.md) — 이 프로젝트의 단일 기준. 확정 사항과 정직성 규칙
+- [results/MEASUREMENT.md](results/MEASUREMENT.md) — 측정 조건, 두 생성기가 다른 이유, 수치를 읽는 규칙
+- [results/](results/) — 측정 결과 JSON
+
+## 이 데모가 하지 않는 것
+
+로그인·배포·결제·시간표 충돌·메시지 큐는 범위 밖이다.
+그리고 **동시 커넥션 1만은 이 머신에서 나오지 않는다.** 모든 수치는 "총 1만 요청 / 동시 N" 이다.

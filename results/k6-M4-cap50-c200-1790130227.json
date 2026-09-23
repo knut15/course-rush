@@ -1,0 +1,32 @@
+{
+  "generator": "k6",
+  "env": "10코어 / 16GB / macOS · k6 는 Docker 컨테이너에서 실행",
+  "mode": "M4",
+  "total": 1000,
+  "concurrency": 200,
+  "students": 10000,
+  "requestedCapacity": 50,
+  "outcome": {
+    "enrolled": 50,
+    "full": 950,
+    "duplicate": 0,
+    "conflict": 0,
+    "unexpected": 0
+  },
+  "rps": 810.4,
+  "latencyMs": {
+    "p50": 42.8,
+    "p95": 171.8,
+    "p99": 191,
+    "max": 209.1
+  },
+  "capacity": 50,
+  "enrolledRows": 50,
+  "over": 0,
+  "duplicateStudents": 0,
+  "redis": {
+    "remaining": 50,
+    "claimed": 0,
+    "leaked": -50
+  }
+}

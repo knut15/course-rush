@@ -1,0 +1,28 @@
+{
+  "name": "course-rush-server",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "start": "tsx src/server.ts",
+    "db:up": "docker-compose up -d",
+    "db:down": "docker-compose down",
+    "db:nuke": "docker-compose down -v",
+    "db:psql": "docker-compose exec db psql -U rush -d rush",
+    "schema": "tsx src/schema.ts",
+    "seed": "tsx src/seed.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "ioredis": "^6.0.0",
+    "pg": "^8.13.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.0",
+    "@types/pg": "^8.11.10",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  }
+}

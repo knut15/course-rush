@@ -1,0 +1,47 @@
+# GOAL.md §2 — board-api 컨테이너가 5432 를 쓰는 중이라 5433 으로 연다.
+#
+# name 을 반드시 적는다. 적지 않으면 compose 가 **디렉터리 이름**을 프로젝트 이름으로 쓰는데,
+# 이 레포도 board-api 도 DB 정의가 `server/` 안에 있어서 둘 다 "server" 가 된다.
+# 그러면 컨테이너(server-db-1)와 볼륨(server_pgdata)을 두 프로젝트가 공유하게 되고,
+# 한쪽에서 up 을 하면 다른 쪽 컨테이너가 재생성된다. 2026-09-22 에 실제로 그렇게 됐다.
+name: course-rush
+
+services:
+  db:
+    image: postgres:16-alpine
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: rush
+      POSTGRES_PASSWORD: rush
+      POSTGRES_DB: rush
+    # 기본 max_connections 는 100 이다. 커넥션 풀 크기를 실험 변수로 쓰려면(GOAL.md §6)
+    # 풀을 키웠을 때 DB 쪽이 먼저 막히면 안 된다. 200 으로 올려 여유를 둔다.
+    command:
+      - postgres
+      - -c
+      - max_connections=200
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rush -d rush"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  # M5 전용. 정원 차감과 중복 검사를 Lua 한 스크립트로 원자적으로 처리한다.
+  #
+  # 볼륨을 붙이지 않는다. 이 Redis 가 들고 있는 것은 측정 한 판 동안의 좌석 상태뿐이고,
+  # 매 측정 시작에 초기화된다. 남길 값이 없는데 볼륨을 붙이면 앞 실행이 다음 실행에 샌다.
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6380:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  pgdata:

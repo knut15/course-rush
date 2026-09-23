@@ -1,0 +1,19 @@
+{
+  "name": "course-rush",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.20.0",
+  "scripts": {
+    "db:up": "pnpm --filter course-rush-server db:up",
+    "db:down": "pnpm --filter course-rush-server db:down",
+    "db:psql": "pnpm --filter course-rush-server db:psql",
+    "schema": "pnpm --filter course-rush-server schema",
+    "seed": "pnpm --filter course-rush-server seed",
+    "dev:server": "pnpm --filter course-rush-server dev",
+    "load": "pnpm --filter course-rush-loadgen run:load",
+    "typecheck": "pnpm -r --if-present typecheck"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

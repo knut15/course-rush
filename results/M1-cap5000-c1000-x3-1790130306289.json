@@ -1,0 +1,124 @@
+{
+  "measuredAt": "2026-09-23T02:25:06.288Z",
+  "env": "10코어 / 16GB / macOS · 전부 로컬",
+  "generator": "internal",
+  "mode": "M1",
+  "total": 10000,
+  "concurrency": 1000,
+  "students": 10000,
+  "poolSize": null,
+  "capacity": 5000,
+  "repeat": 3,
+  "median": {
+    "over": 116,
+    "enrolledRows": 5116,
+    "duplicateStudents": 0,
+    "conflict": 0,
+    "retries": 0,
+    "errors": 0,
+    "rps": 2545.7,
+    "p50": 388,
+    "p95": 453.4,
+    "p99": 459.9
+  },
+  "range": {
+    "over": [
+      84,
+      165
+    ],
+    "p99": [
+      454.3,
+      462.7
+    ],
+    "rps": [
+      2487.7,
+      2563.1
+    ]
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "over": 84,
+      "enrolledRows": 5084,
+      "duplicateStudents": 0,
+      "outcome": {
+        "enrolled": 5084,
+        "full": 4916,
+        "duplicate": 0,
+        "conflict": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "retries": 0
+      },
+      "elapsedMs": 3928.1,
+      "rps": 2545.7,
+      "latencyMs": {
+        "p50": 388,
+        "p95": 449.4,
+        "p99": 454.3,
+        "max": 482.6
+      },
+      "redis": {
+        "remaining": 5000,
+        "claimed": 0,
+        "leaked": -5084
+      }
+    },
+    {
+      "round": 2,
+      "over": 116,
+      "enrolledRows": 5116,
+      "duplicateStudents": 0,
+      "outcome": {
+        "enrolled": 5116,
+        "full": 4884,
+        "duplicate": 0,
+        "conflict": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "retries": 0
+      },
+      "elapsedMs": 4019.8,
+      "rps": 2487.7,
+      "latencyMs": {
+        "p50": 400.1,
+        "p95": 454.1,
+        "p99": 459.9,
+        "max": 480.2
+      },
+      "redis": {
+        "remaining": 5000,
+        "claimed": 0,
+        "leaked": -5116
+      }
+    },
+    {
+      "round": 3,
+      "over": 165,
+      "enrolledRows": 5165,
+      "duplicateStudents": 0,
+      "outcome": {
+        "enrolled": 5165,
+        "full": 4835,
+        "duplicate": 0,
+        "conflict": 0,
+        "errors": 0,
+        "timeouts": 0,
+        "retries": 0
+      },
+      "elapsedMs": 3901.6,
+      "rps": 2563.1,
+      "latencyMs": {
+        "p50": 380,
+        "p95": 453.4,
+        "p99": 462.7,
+        "max": 479
+      },
+      "redis": {
+        "remaining": 5000,
+        "claimed": 0,
+        "leaked": -5165
+      }
+    }
+  ]
+}
