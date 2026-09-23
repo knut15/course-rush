@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { LatencyChart } from "@/components/LatencyChart";
 import { ResultTable } from "@/components/ResultTable";
@@ -83,6 +84,11 @@ export default function Page() {
           정원이 정해진 과목에 요청이 한꺼번에 몰릴 때 무엇이 깨지는지 보는 데모다. 같은 부하를
           다섯 가지 구현에 차례로 던지고 <strong>정원을 넘겨 등록된 건수</strong>와 응답시간을 비교한다.
           동시성을 1로 두면 아무것도 깨지지 않는다 — 요청 수가 아니라 동시성이 원인이기 때문이다.
+        </p>
+        <p className="pt-4 text-sm">
+          <Link href="/queue" style={{ color: "var(--text-muted)" }}>
+            대기열 시연 보기 →
+          </Link>
         </p>
       </header>
 

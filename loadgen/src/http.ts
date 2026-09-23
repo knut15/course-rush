@@ -14,6 +14,7 @@ export function post(
   url: URL,
   payload: unknown,
   timeoutMs: number,
+  extraHeaders: Record<string, string> = {},
 ): Promise<PostResult> {
   return new Promise((resolve, reject) => {
     const data = Buffer.from(JSON.stringify(payload));
@@ -26,7 +27,11 @@ export function post(
         port: url.port,
         path: url.pathname + url.search,
         method: "POST",
-        headers: { "Content-Type": "application/json", "Content-Length": data.length },
+        headers: {
+          "Content-Type": "application/json",
+          "Content-Length": data.length,
+          ...extraHeaders,
+        },
       },
       (res) => {
         const chunks: Buffer[] = [];
@@ -75,5 +80,37 @@ export async function simple(method: "POST" | "GET", url: URL, payload?: unknown
     );
     req.on("error", reject);
     req.end(data);
+  });
+}
+
+/** 대기열 폴링용 GET. 같은 agent 를 써서 소켓을 재사용한다. */
+export function get(agent: http.Agent, url: URL, timeoutMs: number): Promise<PostResult> {
+  return new Promise((resolve, reject) => {
+    const startedAt = performance.now();
+    const req = http.request(
+      {
+        agent,
+        hostname: url.hostname,
+        port: url.port,
+        path: url.pathname + url.search,
+        method: "GET",
+      },
+      (res) => {
+        const chunks: Buffer[] = [];
+        res.on("data", (c: Buffer) => chunks.push(c));
+        res.on("end", () => {
+          let body: unknown = null;
+          try {
+            body = JSON.parse(Buffer.concat(chunks).toString("utf8"));
+          } catch {
+            body = null;
+          }
+          resolve({ status: res.statusCode ?? 0, body, ms: performance.now() - startedAt });
+        });
+      },
+    );
+    req.setTimeout(timeoutMs, () => req.destroy(new Error("timeout")));
+    req.on("error", reject);
+    req.end();
   });
 }

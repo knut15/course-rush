@@ -6,6 +6,7 @@
 import { Router } from "express";
 import { pool, poolSize, setPoolSize } from "../db.js";
 import { redis, remainingKey, resetCourseSeats, studentsKey } from "../redis.js";
+import * as queue from "../queue.js";
 import { strategyList } from "../strategies/index.js";
 
 export const adminRouter = Router();
@@ -25,6 +26,10 @@ adminRouter.post("/reset", async (_req, res) => {
     "SELECT id, capacity FROM courses",
   );
   await Promise.all(courses.rows.map((c) => resetCourseSeats(c.id, c.capacity)));
+
+  // 대기열과 입장 토큰도 비운다. 남겨 두면 앞 측정에서 입장한 사람이
+  // 다음 측정에서 줄을 서지 않고 바로 들어간다.
+  await queue.reset();
 
   res.json({ ok: true });
 });

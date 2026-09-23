@@ -3,6 +3,7 @@
 import { Router } from "express";
 import { pool } from "../db.js";
 import { strategies } from "../strategies/index.js";
+import { isAdmitted } from "../queue.js";
 
 export const enrollRouter = Router();
 
@@ -12,6 +13,17 @@ enrollRouter.post("/", async (req, res) => {
   if (!strategy) {
     res.status(400).json({ error: `모르는 방식입니다: ${mode}` });
     return;
+  }
+
+  // 대기열을 거치게 할지는 요청이 정한다. 1~5단계 측정은 대기열 없이 재야 하므로
+  // 기본은 통과이고, ?queue=1 일 때만 입장 토큰을 본다.
+  if (req.query.queue === "1") {
+    const token = req.header("x-admission-token");
+    if (!token || !(await isAdmitted(token))) {
+      // 429 — 지금은 안 되지만 기다리면 된다는 뜻이다. 403 이 아니다.
+      res.status(429).json({ outcome: "not-admitted", error: "입장 토큰이 없습니다." });
+      return;
+    }
   }
 
   const { courseId, studentId } = req.body as { courseId?: number; studentId?: number };
