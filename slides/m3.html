@@ -1,0 +1,20 @@
+<section id="m3" data-transition="fade" style="background:#FAFAF7; color:#14181F; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:44px">
+  <h2 style="font-size:64px; font-weight:600; line-height:1.15">"낙관적 락이 더 낫다"가 뒤집히는 자리</h2>
+  <div style="display:flex; gap:32px">
+    <div style="flex:1; background:#FCEDED; border:1px solid #E34948; border-radius:20px; padding:44px; display:flex; flex-direction:column; gap:10px">
+      <h3 style="font-size:28px; font-weight:600; color:#B02F2E">재시도 10회를 다 쓰고 실패</h3>
+      <p style="font-size:88px; font-weight:600; font-variant-numeric:tabular-nums; line-height:1.1; color:#B02F2E">2,810</p>
+      <p style="font-size:28px; color:#B02F2E">1만 요청의 28%</p>
+    </div>
+    <div style="flex:1; background:#FFFFFF; border:1px solid #E2E1DC; border-radius:20px; padding:44px; display:flex; flex-direction:column; gap:10px">
+      <h3 style="font-size:28px; font-weight:600; color:#5A6372">재시도 누적</h3>
+      <p style="font-size:88px; font-weight:600; font-variant-numeric:tabular-nums; line-height:1.1">45,581</p>
+      <p style="font-size:28px; color:#5A6372">요청당 4.6회</p>
+    </div>
+  </div>
+  <div style="background:#EFEFEA; border-radius:16px; padding:40px 44px">
+    <p style="font-size:34px; line-height:1.5; color:#14181F">낙관적 락은 <b>충돌이 드물 때만</b> 유리합니다. 수강신청은 한 행에 수천 건이 몰리는, 가장 불리한 조건입니다. 자리가 <b>남아 있는데도</b> 경합에 밀려 실패한 것이므로 마감과 섞어 셀 수 없습니다.</p>
+  </div>
+  <p style="position:absolute; left:128px; bottom:64px; font-size:24px; color:#8A9199">M3 · 정원 5,000 · 재시도 상한 10회 · 백오프 없음</p>
+  <aside>상한 10회는 제가 정한 값입니다. 늘리면 실패는 줄지만 p99가 더 나빠집니다. 백오프를 넣으면 충돌이 크게 줄 수 있지만 다른 전략과 같은 조건이 아니게 되어 일부러 뺐습니다. 이 두 가지를 먼저 말하면 질문이 사라집니다.</aside>
+</section>

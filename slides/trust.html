@@ -1,0 +1,28 @@
+<section id="trust" data-section="이 수치를 믿는 법과 이 구조의 한계" data-transition="fade" style="background:#FAFAF7; color:#14181F; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:40px">
+  <h2 style="font-size:60px; font-weight:600; line-height:1.15">이 수치를 믿어도 되나</h2>
+  <p style="font-size:32px; color:#5A6372; line-height:1.45; width:1560px">같은 조건을 두 가지 부하 생성기로 던졌습니다 &mdash; 직접 만든 것과 k6. RPS 비(내부 &divide; k6):</p>
+  <table style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:30px; color:#14181F; font-variant-numeric:tabular-nums">
+    <tr style="background:#EFEFEA">
+      <th style="width:24%; text-align:left">조건</th>
+      <th style="width:15%; text-align:right">M1</th>
+      <th style="width:15%; text-align:right">M2</th>
+      <th style="width:15%; text-align:right">M3</th>
+      <th style="width:15%; text-align:right">M4</th>
+      <th style="width:16%; text-align:right">M5</th>
+    </tr>
+    <tr><td>정원 50</td><td style="text-align:right">1.9배</td><td style="text-align:right"><b>1.1배</b></td><td style="text-align:right">2.1배</td><td style="text-align:right">1.8배</td><td style="text-align:right"><b>3.4배</b></td></tr>
+    <tr><td>정원 5,000</td><td style="text-align:right">1.3배</td><td style="text-align:right"><b>1.0배</b></td><td style="text-align:right">1.1배</td><td style="text-align:right">1.1배</td><td style="text-align:right"><b>2.6배</b></td></tr>
+  </table>
+  <div style="display:flex; gap:28px">
+    <div style="flex:1; background:#FFFFFF; border:1px solid #E2E1DC; border-radius:18px; padding:36px; display:flex; flex-direction:column; gap:12px">
+      <h3 style="font-size:28px; font-weight:600">정합성은 완전히 일치</h3>
+      <p style="font-size:28px; color:#5A6372; line-height:1.45">M2~M5 는 둘 다 초과 0, M1 은 둘 다 깨졌다. <b style="color:#14181F">핵심 주장은 생성기와 무관하다.</b></p>
+    </div>
+    <div style="flex:1; background:#FFFFFF; border:1px solid #E2E1DC; border-radius:18px; padding:36px; display:flex; flex-direction:column; gap:12px">
+      <h3 style="font-size:28px; font-weight:600">처리량은 갈린다</h3>
+      <p style="font-size:28px; color:#5A6372; line-height:1.45">서버가 느릴수록 일치하고(M2 1.0배), <b style="color:#14181F">서버가 빠를수록 생성기가 병목이 된다</b>(M5 3.4배).</p>
+    </div>
+  </div>
+  <p style="position:absolute; left:128px; bottom:64px; font-size:24px; color:#8A9199">M5 의 RPS 15,287 은 서버의 한계가 아니라 측정 장비의 한계에 가깝다</p>
+  <aside>유리한 쪽만 싣지 않는 것이 이 슬라이드의 목적입니다. M1의 초과는 k6에서 2.4배 더 크게 나옵니다(289 대 693) — k6가 더 촘촘한 동시성을 만들기 때문이고, 깨지는 정도를 말할 때는 k6 수치가 더 정직합니다.</aside>
+</section>

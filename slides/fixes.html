@@ -1,0 +1,27 @@
+<section id="fixes" data-section="네 가지 수정안과 그 수치, 그리고 무엇을 골랐는지" data-transition="fade" style="background:#14181F; color:#FAFAF7; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:44px">
+  <h2 style="font-size:64px; font-weight:600; line-height:1.15">고치는 방법 네 가지</h2>
+  <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:28px">
+    <div style="background:#1E242E; border:1px solid #2E3642; border-radius:18px; padding:36px; display:flex; flex-direction:column; gap:12px">
+      <h3 style="font-size:30px; font-weight:600">M2 &nbsp;비관적 락</h3>
+      <p style="font-family:'JetBrains Mono', 'Courier New', monospace; font-size:24px; color:#7FB3F0; line-height:1.5">SELECT ... FOR UPDATE</p>
+      <p style="font-size:26px; color:#A8B0BD; line-height:1.4">행을 잠근다. 정확하지만 전부 줄을 선다.</p>
+    </div>
+    <div style="background:#1E242E; border:1px solid #2E3642; border-radius:18px; padding:36px; display:flex; flex-direction:column; gap:12px">
+      <h3 style="font-size:30px; font-weight:600">M3 &nbsp;낙관적 락</h3>
+      <p style="font-family:'JetBrains Mono', 'Courier New', monospace; font-size:24px; color:#7FB3F0; line-height:1.5">UPDATE ... WHERE version = $1</p>
+      <p style="font-size:26px; color:#A8B0BD; line-height:1.4">잠그지 않는다. 충돌하면 다시 읽고 재시도.</p>
+    </div>
+    <div style="background:#1E242E; border:1px solid #2A78D6; border-radius:18px; padding:36px; display:flex; flex-direction:column; gap:12px">
+      <h3 style="font-size:30px; font-weight:600">M4 &nbsp;DB 원자적 갱신</h3>
+      <p style="font-family:'JetBrains Mono', 'Courier New', monospace; font-size:24px; color:#7FB3F0; line-height:1.5">UPDATE ... WHERE enrolled &lt; capacity</p>
+      <p style="font-size:26px; color:#A8B0BD; line-height:1.4">판정과 확보를 한 문장이 함께 한다.</p>
+    </div>
+    <div style="background:#1E242E; border:1px solid #2E3642; border-radius:18px; padding:36px; display:flex; flex-direction:column; gap:12px">
+      <h3 style="font-size:30px; font-weight:600">M5 &nbsp;Redis 선점</h3>
+      <p style="font-family:'JetBrains Mono', 'Courier New', monospace; font-size:24px; color:#7FB3F0; line-height:1.5">EVAL &lt;lua&gt; — DECR + SISMEMBER</p>
+      <p style="font-size:26px; color:#A8B0BD; line-height:1.4">판정을 DB 밖으로. DB 는 결과만 적는다.</p>
+    </div>
+  </div>
+  <p style="position:absolute; left:128px; bottom:64px; font-size:24px; color:#6B7684">규칙은 둘 — 정원, 그리고 중복신청 방지</p>
+  <aside>중복신청 규칙 하나가 M4와 M5에 트랜잭션과 보상 로직을 불러옵니다. 정원만 있었다면 M4는 UPDATE 한 문장으로 끝났습니다. 규칙이 하나 늘 때 구조가 어떻게 바뀌는지가 이 프로젝트에서 배운 것입니다.</aside>
+</section>

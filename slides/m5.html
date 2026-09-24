@@ -1,0 +1,21 @@
+<section id="m5" data-transition="fade" style="background:#14181F; color:#FAFAF7; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:40px">
+  <h2 style="font-size:60px; font-weight:600; line-height:1.15">Redis — 그리고 그 약점을 먼저</h2>
+  <div style="display:flex; gap:40px; align-items:flex-start">
+    <div style="flex:1; background:#1E242E; border:1px solid #2E3642; border-radius:18px; padding:36px; display:flex; flex-direction:column; gap:10px">
+      <p style="font-family:'JetBrains Mono', 'Courier New', monospace; font-size:23px; color:#7FB3F0; line-height:1.6">if SISMEMBER(students, id) then</p>
+      <p style="font-family:'JetBrains Mono', 'Courier New', monospace; font-size:23px; color:#7FB3F0; line-height:1.6">&nbsp;&nbsp;return -2 <span style="color:#6B7684">-- 중복</span></p>
+      <p style="font-family:'JetBrains Mono', 'Courier New', monospace; font-size:23px; color:#7FB3F0; line-height:1.6">local n = DECR(remaining)</p>
+      <p style="font-family:'JetBrains Mono', 'Courier New', monospace; font-size:23px; color:#7FB3F0; line-height:1.6">if n &lt; 0 then INCR; return -1 end</p>
+      <p style="font-family:'JetBrains Mono', 'Courier New', monospace; font-size:23px; color:#7FB3F0; line-height:1.6">SADD(students, id)</p>
+    </div>
+    <div style="flex:1; display:flex; flex-direction:column; gap:20px">
+      <p style="font-size:30px; color:#A8B0BD; line-height:1.5"><b style="color:#FAFAF7">두 명령으로 나누면 그 사이가 다시 열립니다.</b> Redis 는 스크립트 하나를 통째로 원자적으로 실행합니다.</p>
+      <p style="font-size:30px; color:#A8B0BD; line-height:1.5">중복 검사가 특히 쌉니다 &mdash; 같은 조건에서 M1 의 <b style="color:#FAFAF7">40배</b>. 예외를 던지고 트랜잭션을 되감는 비용이 없습니다.</p>
+    </div>
+  </div>
+  <div style="background:#2A2020; border-left:6px solid #E34948; border-radius:12px; padding:34px 40px; display:flex; flex-direction:column; gap:10px">
+    <h3 style="font-size:30px; font-weight:600; color:#FF8A89">좌석이 증발한다</h3>
+    <p style="font-size:29px; color:#F0C9C9; line-height:1.45">Redis 선점은 성공했는데 DB INSERT 가 실패하면 되돌려야 합니다. 되돌리기 <b>직전에 프로세스가 죽으면</b> 그 자리는 아무도 앉지 못한 채 남습니다. 멱등 키 · outbox · 재조정 배치 &mdash; <b>셋 다 넣지 않았습니다.</b></p>
+  </div>
+  <aside>약점을 먼저 말하는 것이 가장 강한 카드입니다. 보상 로직이 동작하는 것은 실증했지만(FK 위반으로 INSERT 를 실패시켜 좌석이 유지되는 것을 확인), 보상 자체가 실패하는 경우는 막지 못합니다.</aside>
+</section>

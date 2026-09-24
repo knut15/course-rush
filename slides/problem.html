@@ -1,0 +1,16 @@
+<section id="problem" data-section="정합성과 처리량은 다른 문제다" data-transition="fade" style="background:#FAFAF7; color:#14181F; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:56px">
+  <h2 style="font-size:72px; font-weight:600; line-height:1.1">"동시접속 1만" 안에는 두 문제가 있다</h2>
+  <table style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:30px; color:#14181F">
+    <tr style="background:#EFEFEA">
+      <th style="width:22%; text-align:left">&nbsp;</th>
+      <th style="width:39%; text-align:left">정합성</th>
+      <th style="width:39%; text-align:left">처리량</th>
+    </tr>
+    <tr><td style="color:#5A6372">질문</td><td>51번째가 막히는가</td><td>초당 1만 건을 받아내는가</td></tr>
+    <tr><td style="color:#5A6372">언제 터지나</td><td><b>100명만 동시에 눌러도</b></td><td>용량을 넘을 때</td></tr>
+    <tr><td style="color:#5A6372">해결 수단</td><td>락 · 원자적 연산 · 큐</td><td>수평 확장 · 캐시 · 대기열</td></tr>
+    <tr><td style="color:#5A6372">데모 난이도</td><td>노트북에서 재현된다</td><td>장비가 곧 수치다</td></tr>
+  </table>
+  <p style="font-size:34px; color:#5A6372; line-height:1.45; width:1560px">오른쪽은 인스턴스를 몇 개 띄웠는지의 이야기가 됩니다. <b style="color:#14181F">왼쪽은 반박할 수 없는 실증입니다.</b> 이 발표의 중심은 왼쪽이고, 오른쪽은 대기열이라는 눈에 보이는 장치로 다룹니다.</p>
+  <aside>여기서 가르지 않으면 발표 전체가 "서버 몇 대 붙였다"로 흘러갑니다. 정합성은 노트북에서 재현되고, 재현되면 반박이 안 됩니다.</aside>
+</section>

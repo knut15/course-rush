@@ -1,0 +1,26 @@
+<section id="qa" data-transition="fade" style="background:#FAFAF7; color:#14181F; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:44px">
+  <h2 style="font-size:60px; font-weight:600; line-height:1.15">받을 만한 질문</h2>
+  <div style="display:flex; flex-direction:column; gap:22px">
+    <div style="display:flex; gap:28px; align-items:flex-start">
+      <p style="font-size:30px; font-weight:600; width:640px; line-height:1.4">격리 수준을 SERIALIZABLE 로 올리면 되지 않나</p>
+      <p style="flex:1; font-size:29px; color:#5A6372; line-height:1.45">막힙니다. 대신 직렬화 실패가 쏟아지고 그 재시도를 앱이 떠안습니다 &mdash; 낙관적 락과 같은 성격입니다.</p>
+    </div>
+    <hr style="border-top:1px solid #E2E1DC">
+    <div style="display:flex; gap:28px; align-items:flex-start">
+      <p style="font-size:30px; font-weight:600; width:640px; line-height:1.4">낙관적 락과 비관적 락 중 뭐가 낫나</p>
+      <p style="flex:1; font-size:29px; color:#5A6372; line-height:1.45">충돌 빈도에 달렸습니다. 여기서는 낙관적 락이 28% 실패했습니다.</p>
+    </div>
+    <hr style="border-top:1px solid #E2E1DC">
+    <div style="display:flex; gap:28px; align-items:flex-start">
+      <p style="font-size:30px; font-weight:600; width:640px; line-height:1.4">Redis 없이 DB 만으로 어디까지 가나</p>
+      <p style="flex:1; font-size:29px; color:#5A6372; line-height:1.45">M4 가 이 노트북에서 1,524 RPS 입니다. 대부분의 수강신청은 이 안에 들어옵니다.</p>
+    </div>
+    <hr style="border-top:1px solid #E2E1DC">
+    <div style="display:flex; gap:28px; align-items:flex-start">
+      <p style="font-size:30px; font-weight:600; width:640px; line-height:1.4">좌석이 증발하면 어떻게 복구하나</p>
+      <p style="flex:1; font-size:29px; color:#5A6372; line-height:1.45">지금은 못 합니다. 멱등 키로 재시도를 안전하게 만들고, 주기적으로 Redis 와 DB 를 맞추는 배치가 필요합니다.</p>
+    </div>
+  </div>
+  <p style="position:absolute; left:128px; bottom:64px; font-size:26px; color:#5A6372">github.com/knut15/course-rush</p>
+  <aside>네 질문은 실제로 자주 나옵니다. 답을 준비해 두면 질의응답이 발표의 연장이 됩니다.</aside>
+</section>

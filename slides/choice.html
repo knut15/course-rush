@@ -1,0 +1,25 @@
+<section id="choice" data-transition="fade" style="background:#FAFAF7; color:#14181F; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:44px">
+  <h2 style="font-size:64px; font-weight:600; line-height:1.15">그래서 무엇을 고르나</h2>
+  <div style="display:flex; gap:28px">
+    <div style="flex:1; background:#FFFFFF; border:1px solid #E2E1DC; border-radius:20px; padding:40px; display:flex; flex-direction:column; gap:14px">
+      <h3 style="font-size:30px; font-weight:600; color:#5A6372">M2 비관적 락</h3>
+      <p style="font-size:28px; color:#5A6372; line-height:1.45">정확하다. 전부 줄을 서고 커넥션을 붙잡는다. 트랜잭션이 길고 여러 테이블을 봐야 할 때.</p>
+    </div>
+    <div style="flex:1; background:#FFFFFF; border:1px solid #E2E1DC; border-radius:20px; padding:40px; display:flex; flex-direction:column; gap:14px">
+      <h3 style="font-size:30px; font-weight:600; color:#5A6372">M3 낙관적 락</h3>
+      <p style="font-size:28px; color:#5A6372; line-height:1.45">충돌이 드문 곳에서만. 여기서는 28%가 실패했다.</p>
+    </div>
+    <div style="flex:1; background:#EAF2FC; border:2px solid #2A78D6; border-radius:20px; padding:40px; display:flex; flex-direction:column; gap:14px">
+      <h3 style="font-size:30px; font-weight:600; color:#1C5CAB">M4 DB 원자적 &nbsp;&#9670;</h3>
+      <p style="font-size:28px; color:#14181F; line-height:1.45">읽기·판정·쓰기가 한 문장. 잡는 시간이 짧아 M2 의 2배 처리량. <b>대부분의 실무 답.</b></p>
+    </div>
+    <div style="flex:1; background:#FFFFFF; border:1px solid #E2E1DC; border-radius:20px; padding:40px; display:flex; flex-direction:column; gap:14px">
+      <h3 style="font-size:30px; font-weight:600; color:#5A6372">M5 Redis</h3>
+      <p style="font-size:28px; color:#5A6372; line-height:1.45">가장 빠르다. 운영할 것이 하나 늘고, 좌석이 증발할 수 있다.</p>
+    </div>
+  </div>
+  <div style="background:#EFEFEA; border-radius:16px; padding:36px 44px">
+    <p style="font-size:34px; line-height:1.45"><b>M4 로 시작합니다.</b> 인프라가 늘지 않고, 정확하고, M2 의 두 배를 냅니다. M4 가 부족해질 때 M5 를 얹습니다 &mdash; 그때는 증발한 좌석을 정산할 장치도 함께 만들어야 합니다.</p>
+  </div>
+  <aside>선택에는 근거가 있어야 합니다. "가장 빠른 것"이 아니라 "운영 비용 대비 충분한 것"을 고른다는 점을 말하세요.</aside>
+</section>

@@ -1,0 +1,20 @@
+<section id="why" data-transition="fade" style="background:#14181F; color:#FAFAF7; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:44px">
+  <h2 style="font-size:64px; font-weight:600; line-height:1.15">읽기와 쓰기 사이가 열려 있다</h2>
+  <div style="display:flex; gap:48px; align-items:flex-start">
+    <div style="flex:1; background:#1E242E; border:1px solid #2E3642; border-radius:20px; padding:40px; display:flex; flex-direction:column; gap:14px">
+      <p style="font-family:'JetBrains Mono', 'Courier New', monospace; font-size:26px; color:#7FB3F0; line-height:1.6">SELECT count(*) <span style="color:#6B7684">-- 판정</span></p>
+      <p style="font-family:'JetBrains Mono', 'Courier New', monospace; font-size:26px; color:#E34948; line-height:1.6">&#8681; 여기가 열려 있다</p>
+      <p style="font-family:'JetBrains Mono', 'Courier New', monospace; font-size:26px; color:#7FB3F0; line-height:1.6">INSERT INTO enrollments</p>
+    </div>
+    <div style="flex:1; display:flex; flex-direction:column; gap:18px">
+      <p style="font-size:30px; color:#A8B0BD; line-height:1.5">요청 A 가 count 를 읽고 "49명, 자리 있음" 을 본다</p>
+      <p style="font-size:30px; color:#A8B0BD; line-height:1.5">요청 B 도 같은 순간에 같은 49를 본다</p>
+      <p style="font-size:30px; color:#FAFAF7; line-height:1.5"><b>둘 다 INSERT 한다. 51명이 된다.</b></p>
+    </div>
+  </div>
+  <div style="background:#1E242E; border-left:6px solid #E34948; border-radius:12px; padding:36px 40px">
+    <p style="font-size:32px; line-height:1.45; color:#FAFAF7">UNIQUE(course_id, student_id) 는 이것을 막지 못한다. 그 제약이 막는 것은 <b>같은 학생의 두 번째 신청</b>이지 <b>정원을 넘는 다른 학생</b>이 아니다.</p>
+  </div>
+  <p style="position:absolute; left:128px; bottom:64px; font-size:24px; color:#6B7684">TOCTOU — time-of-check to time-of-use</p>
+  <aside>고전적인 TOCTOU 입니다. 여기서 "제약을 걸면 되지 않나" 라는 질문이 자주 나오는데, 아래 상자가 그 답입니다. 정원은 행 하나에 대한 조건이 아니라 집계에 대한 조건이라 UNIQUE 로 표현되지 않습니다.</aside>
+</section>

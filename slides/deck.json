@@ -1,0 +1,28 @@
+{
+  "v": 4,
+  "createdOnFiles": { "v": 1, "at": "2026-09-23T03:30:00Z" },
+  "title": "수강신청 동시성 — 무엇이 깨지고 어떻게 고치는가",
+  "order": [
+    "cover", "problem", "demo-1", "broken", "why", "concurrency", "isolation",
+    "fixes", "numbers", "m3", "pool", "choice", "m5",
+    "demo-2", "queue", "trust", "limits", "qa"
+  ],
+  "sections": {
+    "s1": { "description": "정합성과 처리량은 다른 문제다", "start": "cover" },
+    "s2": { "description": "순진한 구현이 깨지는 것을 실증하고 왜 깨지는지 본다", "start": "demo-1" },
+    "s3": { "description": "네 가지 수정안과 그 수치, 그리고 무엇을 골랐는지", "start": "fixes" },
+    "s4": { "description": "대기열은 지연을 없애지 않고 옮긴다", "start": "demo-2" },
+    "s5": { "description": "이 수치를 믿는 법과 이 구조의 한계", "start": "trust" }
+  },
+  "faces": {
+    "ibm-plex-sans": {
+      "family": "IBM Plex Sans",
+      "href": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap"
+    },
+    "jetbrains-mono": {
+      "family": "JetBrains Mono",
+      "href": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap"
+    }
+  },
+  "designSystems": []
+}

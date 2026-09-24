@@ -1,0 +1,25 @@
+<section id="queue" data-transition="fade" style="background:#FAFAF7; color:#14181F; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:40px">
+  <div style="display:flex; flex-direction:column; gap:12px">
+    <h2 style="font-size:60px; font-weight:600; line-height:1.15">유입 속도를 조이면 생기는 일</h2>
+    <p style="font-size:30px; color:#5A6372">두 값이 정확히 반대 방향으로 움직인다</p>
+  </div>
+  <table style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:30px; color:#14181F; font-variant-numeric:tabular-nums">
+    <tr style="background:#EFEFEA">
+      <th style="width:24%; text-align:left">유입 속도</th>
+      <th style="width:19%; text-align:right">신청 p50</th>
+      <th style="width:19%; text-align:right">신청 p99</th>
+      <th style="width:19%; text-align:right">대기 p50</th>
+      <th style="width:19%; text-align:right">대기 p99</th>
+    </tr>
+    <tr style="background:#EAF2FC"><td>200/초</td><td style="text-align:right">13.0</td><td style="text-align:right"><b>96.7</b></td><td style="text-align:right">2,415</td><td style="text-align:right">2,625</td></tr>
+    <tr><td>500/초</td><td style="text-align:right">7.9</td><td style="text-align:right">185.8</td><td style="text-align:right">1,004</td><td style="text-align:right">1,119</td></tr>
+    <tr><td>1,000/초</td><td style="text-align:right">460.5</td><td style="text-align:right">584.4</td><td style="text-align:right">202</td><td style="text-align:right">579</td></tr>
+    <tr><td>5,000/초</td><td style="text-align:right">478.1</td><td style="text-align:right">661.7</td><td style="text-align:right">202</td><td style="text-align:right">316</td></tr>
+    <tr style="background:#FCEDED"><td>대기열 없음</td><td style="text-align:right">525.8</td><td style="text-align:right"><b>701.2</b></td><td style="text-align:right">&ndash;</td><td style="text-align:right">&ndash;</td></tr>
+  </table>
+  <div style="background:#EFEFEA; border-radius:16px; padding:36px 44px">
+    <p style="font-size:34px; line-height:1.45">신청 p99 가 <b>701ms 에서 97ms 로</b> 떨어집니다. 대신 줄 선 사람은 2.6초를 기다립니다. <b>지연을 없앤 것이 아니라 옮긴 것입니다</b> &mdash; DB 안에서 기다리던 것을 대기열에서 기다리게 바꿨고, 그쪽이 훨씬 쌉니다.</p>
+  </div>
+  <p style="position:absolute; left:128px; bottom:64px; font-size:24px; color:#8A9199">M4 · 총 2,000 요청 / 동시 500 / 정원 5,000 · 단위 ms</p>
+  <aside>대기열의 핵심은 "초당 몇 명까지 DB에 닿게 할지"를 정하는 것 하나뿐입니다. 1,000/초 근처에서 값이 급변하는데, 그 구간이 대기열이 의미를 잃는 지점으로 보입니다. 더 촘촘히 재지는 않았습니다.</aside>
+</section>

@@ -170,6 +170,7 @@ k6 로도 잰다. 로컬 설치 없이 Docker 로 돈다.
 - [GOAL.md](GOAL.md) — 이 프로젝트의 단일 기준. 확정 사항과 정직성 규칙
 - [results/MEASUREMENT.md](results/MEASUREMENT.md) — 측정 조건, 두 생성기가 다른 이유, 수치를 읽는 규칙
 - [results/](results/) — 측정 결과 JSON
+- [slides/](slides/) — 발표 슬라이드 18장의 원본과 순서
 
 ## 이 데모가 하지 않는 것
 

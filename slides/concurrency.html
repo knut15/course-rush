@@ -1,0 +1,22 @@
+<section id="concurrency" data-transition="fade" style="background:#FAFAF7; color:#14181F; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:48px">
+  <div style="display:flex; flex-direction:column; gap:14px">
+    <h2 style="font-size:64px; font-weight:600; line-height:1.15">요청 수가 아니라 동시성이 원인이다</h2>
+    <p style="font-size:32px; color:#5A6372">전부 같은 1만 요청이다. 동시에 보내는 수만 바꿨다.</p>
+  </div>
+  <table style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:30px; color:#14181F; font-variant-numeric:tabular-nums">
+    <tr style="background:#EFEFEA">
+      <th style="width:25%; text-align:left">동시성</th>
+      <th style="width:25%; text-align:right">등록</th>
+      <th style="width:25%; text-align:right">초과</th>
+      <th style="width:25%; text-align:right">p99</th>
+    </tr>
+    <tr><td>1</td><td style="text-align:right">50</td><td style="text-align:right"><b>0</b></td><td style="text-align:right">1.5 ms</td></tr>
+    <tr><td>10</td><td style="text-align:right">57</td><td style="text-align:right">7</td><td style="text-align:right">4.3 ms</td></tr>
+    <tr><td>100</td><td style="text-align:right">100</td><td style="text-align:right">50</td><td style="text-align:right">26.4 ms</td></tr>
+    <tr><td>500</td><td style="text-align:right">284</td><td style="text-align:right">234</td><td style="text-align:right">139.1 ms</td></tr>
+    <tr style="background:#FCEDED"><td>1,000</td><td style="text-align:right">434</td><td style="text-align:right"><b>384</b></td><td style="text-align:right">290.8 ms</td></tr>
+  </table>
+  <p style="font-size:36px; color:#14181F; line-height:1.45; width:1560px">동시성 1에서는 <b>정확히 50명</b>입니다. 부하를 줄인 것이 아니라 겹치지 않게 보냈을 뿐입니다.</p>
+  <p style="position:absolute; left:128px; bottom:64px; font-size:24px; color:#8A9199">M1 · 총 1만 요청 고정 · 정원 50 · 풀 20</p>
+  <aside>이 표 한 장이 발표에서 가장 강한 근거입니다. 요청 수는 고정이고 동시성만 바꿨는데 초과가 0에서 384로 갑니다.</aside>
+</section>
